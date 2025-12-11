@@ -6,7 +6,7 @@ import Footer from '../Components/Shared/Footer/Footer';
 
 const HomeLayout = () => {
     return (
-        <div className='min-h-screen flex flex-col justify-between'>
+        <div className='min-h-screen flex flex-col '>
             <Navbar></Navbar>
             <section className='overflow-hidden'>
                 <Outlet></Outlet>

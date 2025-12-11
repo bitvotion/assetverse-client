@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router';
 
 const Navbar = () => {
+
+    const [scrolled, setScrolled] = useState(false)
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const isScrolled = window.scrollY > 20;
+            if (isScrolled !== scrolled) {
+                setScrolled(isScrolled)
+            }
+        }
+
+        window.addEventListener('scroll', handleScroll)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+        }
+    }, [scrolled])
 
     // const {
     //     user, loading, signOutUser
@@ -11,7 +28,11 @@ const Navbar = () => {
     const getActiveClass = ({ isActive }) => {
         return (
             isActive
-                ? 'h-10 py-2 px-2 rounded border border-primary text-primary hover:text-primary-content hover:bg-primary'
+                ? `h-10 py-2 px-2 rounded border border-primary text-primary hover:text-primary-content hover:bg-primary border-2 ${
+                        scrolled
+                        ? ''
+                        : 'text-white'
+                    } `
                 : 'h-10 py-2 px-2 hover:bg-primary hover:text-primary-content rounded'
         )
     }
@@ -30,7 +51,11 @@ const Navbar = () => {
     </>
 
     return (
-        <div className="bg-base-100 shadow-xs h-20 flex justify-center items-center top-0 sticky">
+        <div className={` shadow-xs h-20 flex justify-center items-center top-0 fixed w-full ${
+            scrolled 
+            ? 'bg-base-100' 
+            : 'bg-blue-950 text-base-100' 
+        } `}>
 
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
             {/* <div className="drawer-content flex flex-col"></div> */}
@@ -63,13 +88,17 @@ const Navbar = () => {
                 <div className="navbar-end flex-2 gap-4">
                     <div className="navbar-center hidden md:flex">
                         <ul className="flex gap-4 ">
-                        {/* <ul className="flex gap-4 *:h-full *:py-2 *:px-2 *:hover:bg-primary *:hover:text-primary-content *:rounded  "> */}
+                            {/* <ul className="flex gap-4 *:h-full *:py-2 *:px-2 *:hover:bg-primary *:hover:text-primary-content *:rounded  "> */}
                             {
                                 navLinks
                             }
                         </ul>
                     </div>
-                    <a className="btn btn-primary btn-outline text-base w-24 h-10">Login</a>
+                    <a className={`btn btn-primary btn-outline text-base w-24 h-10 border-2 ${
+                        scrolled
+                        ? ''
+                        : 'text-white'
+                    }`}>Login</a>
                 </div>
             </div>
             {/* Drawer Aside */}

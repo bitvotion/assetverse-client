@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Outfit:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Outfit:wght@100..900&display=swap");
 @import "tailwindcss";
 @plugin "daisyui";
 
@@ -76,15 +76,24 @@
   --noise: 0;
 }
 
-
-
 body {
   font-family: "Nunito Sans", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
 }
 
-h1, h2 {
+h1,
+h2 {
+  font-family: "Outfit", sans-serif;
+  font-optical-sizing: auto;
+}
+
+.primary-font {
+  font-family: "Nunito Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+.secondary-font {
   font-family: "Outfit", sans-serif;
   font-optical-sizing: auto;
 }
