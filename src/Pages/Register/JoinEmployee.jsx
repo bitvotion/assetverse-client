@@ -12,6 +12,8 @@ import SlideLeft from '../../Components/Animation/SlideLeft';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import useAxios from '../../Hooks/useAxios';
+import Logo from '../../Components/Logo/Logo';
+import { handleFirebaseError } from '../../Utilities/handleFirebaseError';
 
 const image_hosting_key = import.meta.env.VITE_IMAGE_BB_API_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
@@ -19,7 +21,7 @@ const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_ke
 const JoinEmployee = () => {
     const [currentStep, setCurrentStep] = useState(0)
     const navigate = useNavigate()
-    const { createUser, updateUserProfile } = useAuth()
+    const { createUser, updateUserProfile, setLoading } = useAuth()
     const [showPwd, setShowPwd] = useState(false)
     const [showPasswordRules, setShowPasswordRules] = useState(false)
     const [showStepIndicator, setShowStepIndicator] = useState(false)
@@ -28,6 +30,7 @@ const JoinEmployee = () => {
 
     const {
         register,
+        reset,
         handleSubmit,
         watch,
         trigger,
@@ -52,55 +55,53 @@ const JoinEmployee = () => {
         if (currentStep !== steps.length - 1) return;
 
         try {
-            const toastId = toast.loading("Creating your company workspace...")
+            const toastId = toast.loading("Creating your personal workspace...")
 
             // Upload images to ImgBB
             const userPhoto = { image: data.userPhoto[0] }
-            const companyLogo = { image: data.companyLogo[0] }
             const userPhotoRes = await axios.post(image_hosting_api, userPhoto, {
                 headers: { 'content-type': 'multipart/form-data' }
             })
-            const companyLogoRes = await axios.post(image_hosting_api, companyLogo, {
-                headers: { 'content-type': 'multipart/form-data' }
-            })
             const userPhotoURL = userPhotoRes.data.data.display_url
-            const logoURL = companyLogoRes.data.data.display_url
+
 
             // Firebase Registration
-            // await createUser(data.email, data.password)
-            // await updateUserProfile(data.fullName, userPhotoURL)
+            await createUser(data.email, data.password)
+                .then(async () => {
+                    await updateUserProfile(data.fullName, userPhotoURL)
+                        .then(async () => {
+                            const userData = {
+                                name: data.fullName,
+                                email: data.email,
+                                role: "employee",
+                                dateOfBirth: data.dateOfBirth,
+                                userPhoto: userPhotoURL,
+                            }
+                            // Save data in MongoDB
+                            const res = await axiosInstance.post('/users', userData)
+                            if (res.data.insertedId) {
+                                toast.success("Employee Account Created! Login Now", { id: toastId });
+                                reset()
+                                setCurrentStep(0)
+                                setLoading(false)
+                                navigate('/login')
+                            }
+                        })
+                }).catch((error) => {
+                    setLoading(false)
+                    handleFirebaseError(error.code)
+                })
 
-            // Save data in MongoDB
-            const userData = {
-                name: data.fullName,
-                email: data.email,
-                role: "hr",
-                companyName: data.companyName,
-                companyLogo: logoURL,
-                dateOfBirth: data.dateOfBirth,
-                packageLimit: 5,
-                subscription: "basic",
-                userPhoto: userPhotoURL,
 
-            }
 
-            await axiosInstance.post('/users', userData)
-            toast.success("HR Account Created!", { id: toastId });
-            // navigate('/');
-            console.log('logo url', logoURL, 'user photo url', userPhotoURL);
+            console.log('user photo url', userPhotoURL, res);
         }
-        catch (error) {
+        catch () {
             // console.error(error);
             toast.error("Registration Failed.");
         }
         console.log(data);
     }
-
-
-    // const handleShowPwd = (e) => {
-    //     e.preventDefault()
-    //     setShowPwd(!showPwd)
-    // }
 
     const handleNextStep = async () => {
         const isValid = await trigger(steps[currentStep].fields)
@@ -118,10 +119,11 @@ const JoinEmployee = () => {
     }
 
     return (
-        <div className='min-h-screen bg-base-300 flex'>
-            {/* Left Side */}
-            <div className=' min-h-screen bg-base-200 border-amber-600 lg:rounded-r-[100px] w-full lg:w-1/2 justify-center flex items-center'>
+        <div className=' min-h-screen bg-base-300 flex'>
 
+            {/* Left Side */}
+            <div className='relative min-h-screen bg-base-200 lg:rounded-r-[100px] w-full lg:w-1/2 flex items-center'>
+                <Logo></Logo>
                 <div className=' card w-full overflow-hidden flex flex-col justify-center items-center '>
 
 
@@ -181,7 +183,7 @@ const JoinEmployee = () => {
                                                 onFocus={() => setShowStepIndicator(true)}
                                                 className='input w-full input-bordered validator'>
                                                 <EmailIcon />
-                                                <input type="email" placeholder='hr@company.com' className=''
+                                                <input type="email" placeholder='personal@email.com' className=''
                                                     {...register("email", {
                                                         required: "Email is required",
                                                         pattern: {
