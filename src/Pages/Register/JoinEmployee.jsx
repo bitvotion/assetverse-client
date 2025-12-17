@@ -54,9 +54,8 @@ const JoinEmployee = () => {
     const handleHrRegistration = async (data) => {
         if (currentStep !== steps.length - 1) return;
 
+        const toastId = toast.loading("Creating your personal workspace...")
         try {
-            const toastId = toast.loading("Creating your personal workspace...")
-
             // Upload images to ImgBB
             const userPhoto = { image: data.userPhoto[0] }
             const userPhotoRes = await axios.post(image_hosting_api, userPhoto, {
@@ -83,24 +82,19 @@ const JoinEmployee = () => {
                                 toast.success("Employee Account Created! Login Now", { id: toastId });
                                 reset()
                                 setCurrentStep(0)
-                                setLoading(false)
-                                navigate('/login')
+                                // navigate('/login')
                             }
                         })
-                }).catch((error) => {
-                    setLoading(false)
-                    handleFirebaseError(error.code)
                 })
-
-
-
-            console.log('user photo url', userPhotoURL, res);
+            setLoading(false)
+            // console.log('user photo url', userPhotoURL);
         }
-        catch () {
+        catch (error) {
             // console.error(error);
-            toast.error("Registration Failed.");
+            setLoading(false)
+            handleFirebaseError(error.code, toastId)
         }
-        console.log(data);
+        // console.log(data)
     }
 
     const handleNextStep = async () => {
