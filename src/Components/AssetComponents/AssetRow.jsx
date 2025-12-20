@@ -3,7 +3,6 @@ import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 
 const AssetRow = ({ asset, index, onDelete }) => {
     const { _id, productName, productImage, productType, productQuantity, dateAdded, availableQuantity } = asset;
-    console.log(asset);
 
     return (
         // Added 'flex gap-4' to ensure it behaves like a standard row

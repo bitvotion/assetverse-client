@@ -1,9 +1,10 @@
 import React from 'react';
 import AssetRow from '../AssetComponents/AssetRow';
 
-const TableContainer = ({ assets }) => {
+const TableContainer = ({ assets, onDelete }) => {
 
     // if (!assets || assets.length === 0) return <div className="text-center text-2xl p-10 opacity-50">No assets found.</div>;
+    console.log(assets);
 
     return (
         <div>
@@ -27,7 +28,7 @@ const TableContainer = ({ assets }) => {
                             key={asset._id}
                             asset={asset}
                             index={index}
-                        // onDelete={onDelete} 
+                            onDelete={onDelete}
                         />
                     ))}
                 </ul>

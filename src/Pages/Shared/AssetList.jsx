@@ -198,7 +198,7 @@ const AssetList = () => {
             {/* Content Section */}
             {
                 viewMode === 'grid' ? (
-                    <GridContainer />
+                    <GridContainer assets={assets} onDelete={handleDelete} />
                 ) : (
                     <TableContainer assets={assets} onDelete={handleDelete} />
                 )

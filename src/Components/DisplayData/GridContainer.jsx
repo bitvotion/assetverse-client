@@ -1,4 +1,5 @@
 import React from 'react';
+import AssetCard from '../AssetComponents/AssetCard';
 
 const GridContainer = ({assets, onDelete}) => {
     return (
