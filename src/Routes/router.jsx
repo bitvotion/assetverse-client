@@ -20,6 +20,11 @@ import MyRequest from '../Pages/EmployeePages/MyRequest';
 import MyEmployees from '../Pages/HrPages/MyEmployees';
 import MyTeam from '../Pages/EmployeePages/MyTeam';
 import JoinAs from '../Pages/Register/JoinAs';
+import UpgradePackage from '../Pages/HrPages/UpgradePackage';
+import PaymentSuccess from '../Components/Payments/PaymentSuccess';
+import PaymentHistory from '../Components/Payments/PaymentHistory';
+import HRRoute from './HRRoute';
+import EmployeeRoute from './EmployeeRoute';
 
 const router = createBrowserRouter([
     {
@@ -66,36 +71,48 @@ const router = createBrowserRouter([
             },
             {
                 path: 'add-asset',
-                Component: AddAsset,
+                element: <HRRoute><AddAsset /></HRRoute>,
             },
             {
                 path: 'asset-list',
-                Component: AssetList,
+                element: <HRRoute><AssetList /></HRRoute>,
             },
             {
                 path: 'request-asset',
-                Component: RequestAsset,
+                element: <EmployeeRoute><RequestAsset /></EmployeeRoute>,
             },
             {
                 path: 'all-requests',
-                Component: AllRequests,
+                element: <HRRoute><AllRequests /></HRRoute>,
             },
             {
                 path: 'my-assets',
-                Component: MyAssets,
+                element: <EmployeeRoute><MyAssets /></EmployeeRoute>,
             },
             {
                 path: 'my-team',
-                Component: MyTeam,
+                element: <EmployeeRoute><MyTeam /></EmployeeRoute>,
             },
             {
                 path: 'my-employees',
-                Component: MyEmployees,
+                element: <HRRoute><MyEmployees /></HRRoute>,
             },
             {
                 path: 'my-request',
-                Component: MyRequest,
+                element: <EmployeeRoute><MyRequest /></EmployeeRoute>,
             },
+            {
+                path: 'package-upgrade',
+                element: <HRRoute><UpgradePackage /></HRRoute>,
+            },
+            {
+                path: 'payment-success',
+                element: PaymentSuccess,
+            },
+            {
+                path: 'payment-history',
+                element: <HRRoute><PaymentHistory /></HRRoute>,
+            }
         ]
     }
 ])

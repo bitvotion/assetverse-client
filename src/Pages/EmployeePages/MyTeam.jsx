@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 
 import { useQuery } from '@tanstack/react-query';
 import useAuth from '../../Hooks/useAuth';
-import useAxios from '../../Hooks/useAxios';
 import LoadingSpinner from '../../Utilities/LoadingSpinner';
+import useAxiosSecure from '../../Hooks/useAxiosSecure.jsx';
 
 
 const MyTeam = () => {
     const { user } = useAuth();
-    const axiosInstance = useAxios();
-    
+    const axiosSecure = useAxiosSecure();
+
     // State to track which company is currently selected
     const [selectedCompanyId, setSelectedCompanyId] = useState(null); // Stores hrEmail
 
@@ -18,7 +18,7 @@ const MyTeam = () => {
         queryKey: ['my-affiliations', user?.email],
         enabled: !!user?.email,
         queryFn: async () => {
-            const res = await axiosInstance.get('/my-affiliations', {
+            const res = await axiosSecure.get('/my-affiliations', {
                 params: { email: user.email }
             });
             return res.data;
@@ -37,8 +37,8 @@ const MyTeam = () => {
         queryKey: ['team-members', user?.email, selectedCompanyId],
         enabled: !!user?.email && !!selectedCompanyId,
         queryFn: async () => {
-            const res = await axiosInstance.get('/team-members', {
-                params: { 
+            const res = await axiosSecure.get('/team-members', {
+                params: {
                     email: user.email,
                     hrEmail: selectedCompanyId
                 }
@@ -46,7 +46,7 @@ const MyTeam = () => {
             return res.data;
         }
     });
-console.log("Team member",teamMembers);
+    console.log("Team member", teamMembers);
     // 🎂 Birthday Logic: Filter for Current Month
     const currentMonth = new Date().getMonth(); // 0-11
     const upcomingBirthdays = teamMembers.filter(member => {
@@ -65,8 +65,8 @@ console.log("Team member",teamMembers);
             {companies.length > 0 && (
                 <div className="tabs rounded tabs-boxed mb-8 bg-base-200  inline-block">
                     {companies.map(company => (
-                        <a 
-                            key={company._id} 
+                        <a
+                            key={company._id}
                             className={`tab tab-lg ${selectedCompanyId === company.hrEmail ? 'tab-active bg-primary/20 rounded' : ''}`}
                             onClick={() => setSelectedCompanyId(company.hrEmail)}
                         >
@@ -80,7 +80,7 @@ console.log("Team member",teamMembers);
             )}
 
             <div className="flex flex-col xl:flex-row gap-8">
-                
+
                 {/* Left: Team Members Grid */}
                 <div className="flex-1">
                     <h3 className="text-xl font-semibold mb-4">Team Members</h3>
@@ -116,7 +116,7 @@ console.log("Team member",teamMembers);
                                 🎂 Upcoming Birthdays
                             </h2>
                             <p className="opacity-90 text-sm mb-4">Celebrations for {new Date().toLocaleString('default', { month: 'long' })}</p>
-                            
+
                             {upcomingBirthdays.length === 0 ? (
                                 <div className="text-center py-4 bg-primary-focus rounded-lg opacity-80">
                                     No birthdays this month.
@@ -133,8 +133,8 @@ console.log("Team member",teamMembers);
                                             <div>
                                                 <div className="font-bold">{member.name}</div>
                                                 <div className="text-xs opacity-80">
-                                                    {new Date(member.dateOfBirth).getDate()} 
-                                                    {['st','nd','rd'][((new Date(member.dateOfBirth).getDate()+90)%100-10)%10-1]||'th'}
+                                                    {new Date(member.dateOfBirth).getDate()}
+                                                    {['st', 'nd', 'rd'][((new Date(member.dateOfBirth).getDate() + 90) % 100 - 10) % 10 - 1] || 'th'}
                                                 </div>
                                             </div>
                                         </li>

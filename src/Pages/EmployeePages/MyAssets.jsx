@@ -53,6 +53,7 @@ const MyAssets = () => {
     const totalCount = assetsData.count;
 
     // Handle Return Logic
+// Handle Return Logic
     const handleReturn = (item) => {
         Swal.fire({
             title: 'Return Asset?',
@@ -65,10 +66,11 @@ const MyAssets = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    // Note: We send 'assignedAssetId' (the _id of this doc) and 'assetId' (original product)
-                    const res = await axiosInstance.post('/return-asset', {
-                        assignedAssetId: item._id, 
-                        assetId: item.assetId      
+                    // 👇 CHANGED TO PATCH
+                    // We send the item._id (assigned ID) in the URL
+                    // We send item.assetId (original product ID) in the body
+                    const res = await axiosInstance.patch(`/assets/return/${item._id}`, {
+                        assetId: item.assetId
                     });
 
                     if (res.data.modifiedCount > 0) {

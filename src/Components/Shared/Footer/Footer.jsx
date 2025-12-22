@@ -4,6 +4,7 @@ import { FaFacebook, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import { IoLogoGithub } from 'react-icons/io';
 import { MdKeyboardDoubleArrowUp } from "react-icons/md";
 import { Link } from 'react-router';
+import LogoFull from '../../Logo/LogoFull';
 
 const Footer = () => {
 
@@ -12,12 +13,12 @@ const Footer = () => {
     };
 
     return (
-        <div className='relative bg-blue-950 py-20'>
-            <div className='md:flex max-w-9xl mx-auto px-4 gap-20'>
+        <div className='relative bg-linear-to-b from-blue-900 to-blue-950 border-t-2 border-white/40  py-20'>
+            <div className='md:flex max-w-9xl mx-auto px-4 gap-20 '>
                 {/* left */}
                 <div className='flex-1 '>
                     <div className='flex items-center gap-6 mb-6'>
-                        {/* <img className='w-14' src={logo} alt="" /> */}
+                        <LogoFull></LogoFull>
                         <h2 className='text-white font-semibold text-3xl bg-g fro '>AssetVerse</h2>
                     </div>
                     <p className=' text-gray-100 mb-4'>Simplifying asset tracking for modern teams. We help businesses manage equipment, track assignments, and reduce loss with one intuitive platform</p>

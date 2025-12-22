@@ -12,12 +12,14 @@ import Logo from '../../Components/Logo/Logo';
 import toast from 'react-hot-toast';
 import { handleFirebaseError } from '../../Utilities/handleFirebaseError';
 import { handleFirebaseSuccess } from '../../Utilities/handleFirebaseSuccess';
+import useAxios from '../../Hooks/useAxios';
 
 
 const Login = () => {
     const navigate = useNavigate()
     const { signInUser, setLoading } = useAuth()
     const [showPwd, setShowPwd] = useState(false)
+    const axiosInstance = useAxios()
 
     const {
         register,
@@ -32,6 +34,14 @@ const Login = () => {
 
         try {
             await signInUser(data.email, data.password);
+
+            const user = {email: data.email}
+
+            const res = await axiosInstance.post('/jwt', user)
+
+            if(res.data.token) {
+                localStorage.setItem('access-token', res.data.token)
+            }
 
             handleFirebaseSuccess('login', toastId);
             setLoading(false);

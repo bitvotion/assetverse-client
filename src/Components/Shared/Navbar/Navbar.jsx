@@ -1,10 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router';
+import useAuth from '../../../Hooks/useAuth';
+import useRole from '../../../Hooks/useRole';
+import ThemeSwitcher from '../../../Utilities/ThemeSwitcher';
+import LogoFull from '../../Logo/LogoFull';
 
 const Navbar = () => {
 
     const [scrolled, setScrolled] = useState(false)
-
+    const { user } = useAuth()
+    const [role, isRoleLoading] = useRole();
+    console.log(user);
     useEffect(() => {
         const handleScroll = () => {
             const isScrolled = window.scrollY > 20;
@@ -28,11 +34,10 @@ const Navbar = () => {
     const getActiveClass = ({ isActive }) => {
         return (
             isActive
-                ? `h-10 py-2 px-2 rounded border border-primary text-primary hover:text-primary-content hover:bg-primary border-2 ${
-                        scrolled
-                        ? ''
-                        : 'text-white'
-                    } `
+                ? `h-10 py-2 px-2 rounded border border-primary text-primary hover:text-primary-content hover:bg-primary border-2 ${scrolled
+                    ? ''
+                    : 'text-white'
+                } `
                 : 'h-10 py-2 px-2 hover:bg-primary hover:text-primary-content rounded'
         )
     }
@@ -46,16 +51,21 @@ const Navbar = () => {
 
     const navLinks = <>
         <li><NavLink to="/" className={getActiveClass}>Home</NavLink></li>
-        <li><NavLink to="/join-employee" className={getActiveClass}>Join As Employee</NavLink></li>
+        {
+            user
+            ? (<li><NavLink to="/dashboard" className={getActiveClass}>Go to Dashboard</NavLink></li>)
+            :(<>
+            <li><NavLink to="/join-employee" className={getActiveClass}>Join As Employee</NavLink></li>
         <li><NavLink to="/join-hr" className={getActiveClass}>Join As HR Manager</NavLink></li>
+            </>) 
+        }
     </>
 
     return (
-        <div className={` z-50 shadow-xs h-20 flex justify-center items-center top-0 fixed w-full ${
-            scrolled 
-            ? 'bg-base-100' 
-            : 'bg-blue-900 text-base-100' 
-        } `}>
+        <div className={` z-50 shadow-md h-24 flex justify-center items-center top-0 fixed w-full ${scrolled
+            ? 'bg-base-100'
+            : 'bg-blue-900 text-base-100'
+            } `}>
 
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
             {/* <div className="drawer-content flex flex-col"></div> */}
@@ -82,6 +92,7 @@ const Navbar = () => {
                         </label>
                     </div>
                     {/* Navbar */}
+                    <LogoFull></LogoFull>
                     <a><h2 className='text-2xl font-semibold '>AssetVerse</h2></a>
                 </div>
 
@@ -94,11 +105,27 @@ const Navbar = () => {
                             }
                         </ul>
                     </div>
-                    <Link to='/login' className={`btn btn-primary btn-outline text-base w-24 h-10 border-2 ${
-                        scrolled
-                        ? ''
-                        : 'text-white'
-                    }`}>Login</Link>
+                    {
+                        !user ?
+                            (<Link to='/login' className={`btn btn-primary btn-outline text-base w-24 h-10 border-2 ${scrolled
+                                ? ''
+                                : 'text-white'
+                                }`}>Login</Link>)
+                            : (
+                                < div className="flex items-center gap-3">
+                                    <div className="text-right hidden sm:block">
+                                        <p className="text-sm font-bold">{user?.displayName}</p>
+                                        <p className="text-xs text-gray-500 uppercase">{role}</p>
+                                    </div>
+                                    <div className="avatar">
+                                        <div className="w-10 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                            <img src={user?.photoURL || "https://i.ibb.co/T0x6c6z/profile.png"} alt="profile" />
+                                        </div>
+                                    </div>
+                                </div>)
+                    }
+                    <ThemeSwitcher />
+
                 </div>
             </div>
             {/* Drawer Aside */}
@@ -111,7 +138,7 @@ const Navbar = () => {
                     <li><a>Join As HR Manager</a></li>
                 </ul>
             </div>
-        </div>
+        </div >
     );
 };
 

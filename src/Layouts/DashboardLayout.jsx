@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router';
 import useRole from '../Hooks/useRole';
 import useAuth from '../Hooks/useAuth';
-import { FaHome, FaBox, FaUserPlus, FaUsers, FaClipboardList, FaSignOutAlt, FaBars } from 'react-icons/fa';
+import { FaHome, FaBox, FaUserPlus, FaUsers, FaClipboardList, FaSignOutAlt, FaBars, FaCrown, FaHistory } from 'react-icons/fa';
 import { GoSidebarExpand, GoSidebarCollapse } from "react-icons/go";
 import LogoFull from '../Components/Logo/LogoFull';
 import { TbCubePlus, TbDevicesPlus } from "react-icons/tb";
 import { MdInventory, MdOutlineHistoryEdu } from 'react-icons/md';
+import LimitWarning from '../Utilities/LimitWarning';
 
 const DashboardLayout = () => {
     const { user, signOutUser } = useAuth();
@@ -16,7 +17,10 @@ const DashboardLayout = () => {
 
     const handleLogOut = () => {
         signOutUser()
-            .then(() => { navigate('/') })
+            .then(() => {
+                localStorage.removeItem('access-token')
+                navigate('/') 
+                })
     };
 
     if (isRoleLoading) return <span className="loading loading-spinner text-primary"></span>;
@@ -28,6 +32,8 @@ const DashboardLayout = () => {
         { name: "Add Asset", path: "/dashboard/add-asset", icon: <TbCubePlus size={24} /> },
         { name: "All Requests", path: "/dashboard/all-requests", icon: <MdOutlineHistoryEdu size={24} /> },
         { name: "My Employees", path: "/dashboard/my-employees", icon: <FaUsers size={24} /> },
+        { name: "Package Upgrade", path: "/dashboard/package-upgrade", icon: <FaCrown size={24} /> },
+        { name: "Payment History", path: "/dashboard/payment-history", icon: <FaHistory size={24} /> },
     ];
 
     const employeeLinks = [
@@ -80,6 +86,8 @@ const DashboardLayout = () => {
                         </div>
                     </div>
                 </nav>
+
+                <LimitWarning />
 
                 {/* Page content here */}
                 <div className="p-8 bg-base-100 min-h-[calc(100vh-64px)]">
