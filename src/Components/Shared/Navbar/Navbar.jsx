@@ -51,10 +51,10 @@ const Navbar = () => {
     </>
 
     return (
-        <div className={` shadow-xs h-20 flex justify-center items-center top-0 fixed w-full ${
+        <div className={` z-50 shadow-xs h-20 flex justify-center items-center top-0 fixed w-full ${
             scrolled 
             ? 'bg-base-100' 
-            : 'bg-blue-950 text-base-100' 
+            : 'bg-blue-900 text-base-100' 
         } `}>
 
             <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />

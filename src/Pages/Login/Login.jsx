@@ -47,9 +47,6 @@ const Login = () => {
 
 
     return (
-        <div className=' min-h-screen bg-base-300 flex'>
-
-            {/* Left Side */}
             <div className='relative min-h-screen bg-base-200 lg:rounded-r-[100px] w-full lg:w-1/2 flex items-center'>
                 {/* <Logo></Logo> */}
                 <div className=' card w-full overflow-hidden flex flex-col justify-center items-center '>
@@ -128,14 +125,10 @@ const Login = () => {
                             </button>
                         </div>
                     </form>
-                    <p className='text-center mt-3 text-gray-5 00'><span className='select-none'>Doesn't have any account? </span><span><Link className='text-blue-500 hover:underline font-semibold' to="/login">Create an account</Link></span></p>
+                    <p className='text-center mt-3 text-gray-5 00'><span className='select-none'>Doesn't have any account? </span><span><Link className='text-blue-500 hover:underline font-semibold' to="/join-as">Create an account</Link></span></p>
                 </div>
 
             </div>
-            {/* <div className='min-h-screen  bg-base-200 border-red-600'>
-    
-                </div> */}
-        </div>
     );
 };
 

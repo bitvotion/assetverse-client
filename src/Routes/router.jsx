@@ -18,6 +18,8 @@ import AllRequests from '../Pages/HrPages/AllRequest';
 import MyAssets from '../Pages/EmployeePages/MyAssets';
 import MyRequest from '../Pages/EmployeePages/MyRequest';
 import MyEmployees from '../Pages/HrPages/MyEmployees';
+import MyTeam from '../Pages/EmployeePages/MyTeam';
+import JoinAs from '../Pages/Register/JoinAs';
 
 const router = createBrowserRouter([
     {
@@ -47,6 +49,10 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 Component: Login,
+            },
+            {
+                path: '/join-as',
+                Component: JoinAs,
             },
         ]
     },
@@ -80,7 +86,7 @@ const router = createBrowserRouter([
             },
             {
                 path: 'my-team',
-                Component: AllRequests,
+                Component: MyTeam,
             },
             {
                 path: 'my-employees',
