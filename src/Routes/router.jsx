@@ -25,6 +25,7 @@ import PaymentSuccess from '../Components/Payments/PaymentSuccess';
 import PaymentHistory from '../Components/Payments/PaymentHistory';
 import HRRoute from './HRRoute';
 import EmployeeRoute from './EmployeeRoute';
+import Profile from '../Pages/Shared/Profile';
 
 const router = createBrowserRouter([
     {
@@ -112,6 +113,10 @@ const router = createBrowserRouter([
             {
                 path: 'payment-history',
                 element: <HRRoute><PaymentHistory /></HRRoute>,
+            },
+            {
+                path: 'profile',
+                element: <Profile></Profile>
             }
         ]
     }

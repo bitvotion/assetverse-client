@@ -5,33 +5,34 @@ import { useEffect } from "react";
 
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000' // Change this to your Vercel URL later
+    baseURL: 'http://localhost:3000'
+    // baseURL: 'https://assetverse-server-xi.vercel.app'
 });
 
 const useAxiosSecure = () => {
     const navigate = useNavigate();
-    const { signOutUser } = useAuth(); // Ensure your AuthContext calls it 'logOut'
+    const { signOutUser } = useAuth(); // Ensure Yyour AuthContext calls it 'logOut'
 
-    useEffect(()=>{
-        const requestInterceptor = instance.interceptors.request.use((config)=>{
+    useEffect(() => {
+        const requestInterceptor = instance.interceptors.request.use((config) => {
 
             const token = localStorage.getItem('access-token')
 
-            if(token) {
+            if (token) {
                 config.headers.authorization = `Bearer ${token}`
             }
             return config
         })
 
-        const responseInterceptor = instance.interceptors.response.use(res=>{
+        const responseInterceptor = instance.interceptors.response.use(res => {
             return res
-        },err=>{
+        }, err => {
             const status = err.response?.status
-            if(status === 401 || status === 403){
+            if (status === 401 || status === 403) {
                 signOutUser()
-                .then(()=>{
-                    navigate('/login')
-                })
+                    .then(() => {
+                        navigate('/login')
+                    })
             }
             return Promise.reject(err)
         })
@@ -39,7 +40,7 @@ const useAxiosSecure = () => {
             instance.interceptors.request.eject(requestInterceptor)
             instance.interceptors.response.eject(responseInterceptor)
         }
-    },[signOutUser, navigate])
+    }, [signOutUser, navigate])
 
     return instance;
 };

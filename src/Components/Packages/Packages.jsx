@@ -1,6 +1,8 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion'; // Import Framer Motion
 import useAxios from '../../Hooks/useAxios';
+
 
 const Packages = () => {
 
@@ -13,7 +15,7 @@ const Packages = () => {
             return res.data;
         }
     });
-
+    console.log(packages);
 
     // Helper to get styles based on package name
     const getCardStyles = (name) => {
@@ -29,23 +31,57 @@ const Packages = () => {
         }
     };
 
+    // Animation Variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.2 // Stagger the cards appearing
+            }
+        }
+    };
+
+    const cardVariants = {
+        hidden: { opacity: 0, y: 50 }, // Start slightly down and invisible
+        visible: { 
+            opacity: 1, 
+            y: 0, 
+            transition: { duration: 0.5, ease: "easeOut" } 
+        }
+    };
+
     return (
-        <section className="py-10 bg-linear-to-b from-blue-900 to-blue-600" id="pricing"> {/* Dark background like the reference */}
+        <section className="py-10 bg-linear-to-b from-blue-900 to-blue-600" id="pricing"> 
             <div className="container mx-auto px-6">
                 
-                {/* Header (White text on dark bg) */}
-                <div className="text-center mb-16">
+                {/* Header with Animation */}
+                <motion.div 
+                    initial={{ opacity: 0, y: -30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-16"
+                >
                     <h2 className="text-5xl font-extrabold text-white mb-4">Pricing</h2>
                     <p className="text-gray-400 max-w-lg mx-auto">
                         Simple, transparent pricing for teams of all sizes.
                     </p>
-                </div>
+                </motion.div>
 
-                {/* Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                {/* Grid Container with Stagger Animation */}
+                <motion.div 
+                    variants={containerVariants}
+                    initial=""
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto"
+                >
                     {packages.map((pkg) => (
-                        <div 
+                        <motion.div 
                             key={pkg._id} 
+                            variants={cardVariants}
+                            // Kept all your existing classes exactly as they were
                             className={`card z-0 shadow-xl transition-transform duration-300 hover:-translate-y-2 border-0 rounded-3xl overflow-hidden text-black ${getCardStyles(pkg.name)}`}
                         >
                             <div className="card-body p-10 flex flex-col h-full">
@@ -73,7 +109,7 @@ const Packages = () => {
                                     )}
                                 </div>
 
-                                {/* Description/Subtitle (Optional based on data) */}
+                                {/* Description/Subtitle */}
                                 <p className="mb-8 font-medium opacity-90">
                                     Perfect for {pkg.employeeLimit <= 5 ? 'startups' : pkg.employeeLimit <= 10 ? 'growing teams' : 'large organizations'}.
                                 </p>
@@ -93,15 +129,15 @@ const Packages = () => {
                                     ))}
                                 </ul>
 
-                                {/* Action Button - Pure Black */}
+                                {/* Action Button */}
                                 <button className="btn bg-black text-white hover:bg-gray-800 border-none w-full rounded-xl h-14 text-lg font-bold mt-auto shadow-none">
                                     {pkg.name === 'Basic' ? 'Start Free Trial' : `Get ${pkg.name}`}
                                 </button>
 
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
             </div>
         </section>
     );

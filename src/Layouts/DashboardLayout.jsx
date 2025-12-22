@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router';
 import useRole from '../Hooks/useRole';
 import useAuth from '../Hooks/useAuth';
-import { FaHome, FaBox, FaUserPlus, FaUsers, FaClipboardList, FaSignOutAlt, FaBars, FaCrown, FaHistory } from 'react-icons/fa';
+import { FaHome, FaBox, FaUserPlus, FaUsers, FaClipboardList, FaSignOutAlt, FaBars, FaCrown, FaHistory, FaUserAlt } from 'react-icons/fa';
 import { GoSidebarExpand, GoSidebarCollapse } from "react-icons/go";
 import LogoFull from '../Components/Logo/LogoFull';
 import { TbCubePlus, TbDevicesPlus } from "react-icons/tb";
@@ -27,6 +27,7 @@ const DashboardLayout = () => {
 
     // --- MENUS ---
     const hrLinks = [
+        { name: "My Profile", path: "/dashboard/profile", icon: <FaUserAlt  size={24} />, end: true },
         { name: "Dashboard", path: "/dashboard", icon: <FaHome size={24} />, end: true },
         { name: "Asset List", path: "/dashboard/asset-list", icon: <FaBox size={24} /> },
         { name: "Add Asset", path: "/dashboard/add-asset", icon: <TbCubePlus size={24} /> },
@@ -37,6 +38,7 @@ const DashboardLayout = () => {
     ];
 
     const employeeLinks = [
+        { name: "My Profile", path: "/dashboard/profile", icon: <FaUserAlt  size={24} />, end: true },
         { name: "Dashboard", path: "/dashboard", icon: <FaHome size={24} />, end: true },
         { name: "My Assets", path: "/dashboard/my-assets", icon: <MdInventory size={24} /> },
         { name: "Request Asset", path: "/dashboard/request-asset", icon: <TbDevicesPlus size={24} /> },
